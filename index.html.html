@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>RATI · 你的 rapper 人格｜地下厂牌测试</title>
+<meta name="description" content="15 道题测出你的地下厂牌人格。" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@500;700&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --gold:#FFD700;
+    --gold-soft:#b8860b;
+    --gold-bright:#FFF4B0;
+    --gold-dark:#5a4500;
+    --neon:#39FF14;
+    --neon-glow:rgba(57,255,20,.55);
+    --purple:#B026FF;
+    --bg:#050505;
+    --bg2:#0c0c0d;
+    --ink:#f4f4f4;
+    --muted:#6e6e6e;
+    --line:rgba(255,215,0,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans SC',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+  .font-display{font-family:'Bebas Neue','Oswald',sans-serif;letter-spacing:.04em}
+  .font-graff{font-family:'ZCOOL KuaiLe','Noto Sans SC',sans-serif}
+  .font-impact{font-family:'Oswald','Bebas Neue','Noto Sans SC',sans-serif;font-weight:700;letter-spacing:.02em}
+
+  /* 舞台背景：顶光射线 + 工业颗粒 */
+  .stage-bg{
+    background:
+      radial-gradient(60% 30% at 50% 0%, rgba(255,215,0,.13), transparent 70%),
+      radial-gradient(45% 28% at 12% 5%, rgba(57,255,20,.05), transparent 70%),
+      radial-gradient(45% 28% at 88% 5%, rgba(176,38,255,.06), transparent 70%),
+      linear-gradient(180deg,#070707 0%, #050505 50%, #0a0a0a 100%);
+  }
+  .spotlight::before{
+    content:"";position:fixed;top:-10vh;left:50%;transform:translateX(-50%);
+    width:80vw;height:60vh;pointer-events:none;
+    background:conic-gradient(from 90deg at 50% 0%,
+      transparent 0deg, rgba(255,215,0,.05) 25deg, rgba(255,215,0,.14) 45deg, rgba(255,215,0,.05) 65deg, transparent 90deg);
+    filter:blur(24px);z-index:0;opacity:.8;
+  }
+  .grid-lines{
+    background-image:
+      linear-gradient(rgba(255,215,0,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,215,0,.04) 1px, transparent 1px);
+    background-size:44px 44px;
+  }
+  .noise::after{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:overlay;z-index:2;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>");
+  }
+
+  /* 金属渐变文字 */
+  .metal-text{
+    background:linear-gradient(180deg, #FFF4B0 0%, #FFD700 35%, #b8860b 55%, #FFD700 75%, #5a4500 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 14px rgba(255,215,0,.35)) drop-shadow(0 2px 1px rgba(0,0,0,.8));
+  }
+  .neon-text{
+    color:var(--neon);
+    text-shadow:0 0 6px var(--neon-glow),0 0 18px rgba(57,255,20,.35),0 0 40px rgba(57,255,20,.18);
+  }
+
+  /* 边框 */
+  .gold-border{
+    border:1px solid var(--gold);
+    box-shadow:0 0 0 1px rgba(255,215,0,.18), 0 0 22px rgba(255,215,0,.25), inset 0 0 22px rgba(255,215,0,.08);
+  }
+  .chip{border:1px solid var(--line);background:rgba(255,255,255,.02);}
+
+  /* 金链子：呼吸光 + 极缓慢微弱摆动（像真实挂在空中） */
+  .chain-wrap{transform-origin:50% 0%;animation:swing 5.6s ease-in-out infinite;}
+  @keyframes swing{0%,100%{transform:rotate(-.8deg)}50%{transform:rotate(.8deg)}}
+  .chain-glow{
+    filter:drop-shadow(0 3px 2px rgba(0,0,0,.85)) drop-shadow(0 0 8px rgba(255,215,0,.5)) drop-shadow(0 0 20px rgba(255,215,0,.28));
+    animation:breathe 3.6s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{filter:drop-shadow(0 3px 2px rgba(0,0,0,.85)) drop-shadow(0 0 8px rgba(255,215,0,.5)) drop-shadow(0 0 20px rgba(255,215,0,.28))}
+    50%{filter:drop-shadow(0 3px 2px rgba(0,0,0,.85)) drop-shadow(0 0 12px rgba(255,215,0,.75)) drop-shadow(0 0 30px rgba(255,215,0,.5))}
+  }
+
+  /* 按钮：呼吸光 + 点击缩放 */
+  .btn-gold{
+    background:linear-gradient(180deg,#FFE15A 0%,#FFD700 45%,#b8860b 100%);
+    color:#1a1500;font-weight:900;letter-spacing:.06em;
+    box-shadow:0 0 0 1px rgba(255,215,0,.6),0 8px 28px rgba(255,215,0,.4),inset 0 -3px 0 rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.4);
+    animation:btn-breath 2.6s ease-in-out infinite;
+    transition:transform .12s ease;cursor:pointer;
+  }
+  @keyframes btn-breath{
+    0%,100%{box-shadow:0 0 0 1px rgba(255,215,0,.6),0 8px 28px rgba(255,215,0,.4),inset 0 -3px 0 rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.4)}
+    50%{box-shadow:0 0 0 1px rgba(255,215,0,.95),0 12px 38px rgba(255,215,0,.65),inset 0 -3px 0 rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.5)}
+  }
+  .btn-gold:active{transform:scale(.97)}
+  .btn-gold:disabled{opacity:.4;animation:none;cursor:not-allowed}
+  .btn-neon{
+    background:linear-gradient(180deg,#5cff3b 0%,#39FF14 50%,#1ea30c 100%);
+    color:#001a00;font-weight:900;letter-spacing:.06em;
+    box-shadow:0 0 0 1px rgba(57,255,20,.6),0 8px 30px rgba(57,255,20,.45),inset 0 -3px 0 rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.3);
+    transition:transform .12s ease;cursor:pointer;
+  }
+  .btn-neon:active{transform:scale(.97)}
+  .btn-neon:disabled{opacity:.4;cursor:not-allowed}
+  .btn-ghost{
+    border:1px solid rgba(255,215,0,.35);color:var(--gold);background:transparent;
+    transition:all .15s ease;cursor:pointer;
+  }
+  .btn-ghost:active{transform:scale(.97)}
+  .btn-ghost:hover{background:rgba(255,215,0,.06)}
+
+  /* 选项卡片 */
+  .opt{
+    position:relative;display:flex;width:100%;text-align:left;gap:.75rem;
+    background:linear-gradient(180deg, rgba(255,215,0,.03), rgba(255,255,255,.01));
+    border:1px solid rgba(255,215,0,.15);
+    transition:transform .18s cubic-bezier(.2,.8,.2,1), border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    cursor:pointer;
+  }
+  .opt:active{transform:scale(.985)}
+  .opt:hover{border-color:var(--gold);background:linear-gradient(180deg, rgba(255,215,0,.08), rgba(255,215,0,.02));box-shadow:0 0 0 1px rgba(255,215,0,.3),0 6px 18px rgba(0,0,0,.5)}
+  .opt .opt-badge{
+    border:1px solid rgba(255,215,0,.5);color:var(--gold);
+    font-family:'Bebas Neue',sans-serif;flex-shrink:0;
+  }
+  .opt.selected{
+    border-color:var(--neon);
+    background:linear-gradient(180deg, rgba(57,255,20,.10), rgba(57,255,20,.02));
+    box-shadow:0 0 0 1px rgba(57,255,20,.5),0 0 22px rgba(57,255,20,.25), inset 0 0 18px rgba(57,255,20,.06);
+  }
+  .opt.selected .opt-badge{border-color:var(--neon);color:var(--neon);background:rgba(57,255,20,.1);}
+
+  /* 进度条 */
+  .progress-track{background:rgba(255,255,255,.06);height:6px;border-radius:999px;overflow:hidden;border:1px solid rgba(255,215,0,.12)}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#b8860b,#FFD700,#FFF4B0);box-shadow:0 0 12px rgba(255,215,0,.5);transition:width .35s ease}
+
+  /* ===== 四个独立全屏视图：绝对定位互不堆叠，!important 压过 Tailwind 的 .flex ===== */
+  .screen{
+    display:none !important;
+    position:absolute;top:0;left:0;width:100%;min-height:100vh;
+  }
+  .screen.active{
+    display:flex !important;
+    flex-direction:column;
+    animation:fadeInUp .3s ease-out;
+  }
+  @keyframes fadeInUp{
+    from{opacity:0;transform:translateY(18px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .screen.active{animation:none}
+  }
+
+  /* 答题卡滑动动画 */
+  .q-card.animate-next{animation:slideInRight .35s cubic-bezier(.2,.8,.2,1)}
+  .q-card.animate-back{animation:slideInLeft .35s cubic-bezier(.2,.8,.2,1)}
+  .q-card.animate-out{animation:slideOutLeft .26s ease forwards}
+  @keyframes slideInRight{from{transform:translateX(48px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes slideInLeft{from{transform:translateX(-48px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes slideOutLeft{from{transform:translateX(0);opacity:1}to{transform:translateX(-48px);opacity:0}}
+
+  /* 黑胶唱片 */
+  .vinyl{
+    width:170px;height:170px;border-radius:50%;
+    background:
+      repeating-radial-gradient(circle at 50% 50%, #141414 0 2px, #060606 2px 4px),
+      radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
+    box-shadow:0 0 0 2px rgba(255,215,0,.35),0 0 30px rgba(255,215,0,.22), inset 0 0 30px rgba(0,0,0,.9);
+    position:relative;animation:spin 3.4s linear infinite;
+  }
+  .vinyl::before{
+    content:"";position:absolute;inset:36%;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #FFE15A, #FFD700 35%, #b8860b 75%, #5a4500);
+    box-shadow:0 0 0 2px #2a1f00, inset 0 0 8px rgba(0,0,0,.5);
+  }
+  .vinyl::after{
+    content:"R";position:absolute;left:50%;top:50%;
+    font-family:'Oswald',sans-serif;font-weight:900;font-size:22px;color:#2a1f00;
+    transform:translate(-50%,-50%);line-height:1;
+  }
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  #loading-text{transition:opacity .18s ease}
+
+  /* 跑马灯 */
+  .marquee{display:flex;gap:1.5rem;white-space:nowrap;animation:scroll 22s linear infinite}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* glitch */
+  .glitch{position:relative}
+  .glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;}
+  .glitch::before{color:rgba(57,255,20,.4);transform:translate(2px,0);mix-blend-mode:screen;clip-path:inset(0 0 60% 0)}
+  .glitch::after{color:rgba(176,38,255,.4);transform:translate(-2px,0);mix-blend-mode:screen;clip-path:inset(60% 0 0 0)}
+
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-thumb{background:rgba(255,215,0,.3);border-radius:8px}
+
+  .result-card{
+    background:linear-gradient(180deg, rgba(255,215,0,.04), rgba(255,255,255,.01));
+    border:1px solid rgba(255,215,0,.25);
+    box-shadow:0 0 0 1px rgba(255,215,0,.12),0 8px 30px rgba(0,0,0,.6), inset 0 0 30px rgba(255,215,0,.04);
+  }
+  .skeleton{
+    background:linear-gradient(90deg,rgba(255,215,0,.04) 0%,rgba(255,215,0,.12) 50%,rgba(255,215,0,.04) 100%);
+    background-size:200% 100%;animation:sk 1.4s ease-in-out infinite;border-radius:6px;
+  }
+  @keyframes sk{from{background-position:200% 0}to{background-position:-200% 0}}
+
+  /* Kanye 隐藏款特殊样式 */
+  .kanye-mode{
+    border-color:var(--gold) !important;
+    background:linear-gradient(135deg, rgba(255,215,0,.12), rgba(176,38,255,.08), rgba(255,215,0,.12)) !important;
+    background-size:200% 200%;
+    animation:gold-shimmer 3s ease infinite;
+    box-shadow:0 0 0 1px var(--gold), 0 0 40px rgba(255,215,0,.55), inset 0 0 40px rgba(255,215,0,.12) !important;
+  }
+  @keyframes gold-shimmer{0%,100%{background-position:0% 0%}50%{background-position:100% 100%}}
+  .kanye-mode .metal-text{
+    background:linear-gradient(135deg, #FFF4B0 0%, #FFD700 25%, #B026FF 50%, #FFD700 75%, #FFF4B0 100%);
+    background-size:200% 100%;
+    -webkit-background-clip:text;background-clip:text;
+    animation:rainbow-shimmer 2.5s linear infinite;
+  }
+  @keyframes rainbow-shimmer{from{background-position:0% 0}to{background-position:200% 0}}
+  .kanye-badge{
+    display:inline-flex;align-items:center;gap:.4rem;
+    background:linear-gradient(135deg,#FFE15A,#FFD700,#b8860b);
+    color:#1a1500;font-weight:900;font-size:11px;letter-spacing:.12em;
+    padding:.4rem 1rem;border-radius:999px;
+    box-shadow:0 0 0 1px rgba(255,215,0,.6),0 0 18px rgba(255,215,0,.6);
+    animation:badge-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes badge-pulse{
+    0%,100%{box-shadow:0 0 0 1px rgba(255,215,0,.6),0 0 18px rgba(255,215,0,.6)}
+    50%{box-shadow:0 0 0 2px rgba(255,215,0,1),0 0 30px rgba(255,215,0,.9)}
+  }
+
+  /* Verse 生成器 */
+  .verse-box{
+    background:linear-gradient(180deg,rgba(57,255,20,.05),transparent);
+    border:1px solid rgba(57,255,20,.2);
+    border-radius:8px;padding:12px 14px;
+  }
+  .verse-line{
+    font-size:14px;line-height:2;color:#e0e0e0;
+    font-family:'ZCOOL KuaiLe','Noto Sans SC',sans-serif;
+  }
+  .verse-line::before{content:"♪ ";color:var(--neon);opacity:.6;}
+
+  /* CP/Beef */
+  .cp-bar-track{height:8px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden;border:1px solid rgba(255,215,0,.1)}
+  .cp-bar-synergy{background:linear-gradient(90deg,#39FF14,#1ea30c)}
+  .cp-bar-beef{background:linear-gradient(90deg,#FFD700,#ff4444)}
+  .friend-select{
+    background:#0a0a0a;border:1px solid rgba(255,215,0,.25);color:#f4f4f4;
+    padding:11px 12px;border-radius:8px;width:100%;font-size:13px;
+    appearance:none;-webkit-appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' stroke='%23FFD700' stroke-width='1.5' fill='none'/></svg>");
+    background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
+  }
+  .friend-select:focus{border-color:var(--gold);box-shadow:0 0 0 1px rgba(255,215,0,.3)}
+  .friend-select option{background:#0a0a0a;color:#f4f4f4}
+
+  /* Kanye 稀有度提示 */
+  .kanye-message{
+    background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(176,38,255,.08),rgba(255,215,0,.12));
+    background-size:200% 200%;
+    border:1px solid var(--gold);border-radius:10px;padding:16px 14px;text-align:center;
+    box-shadow:0 0 24px rgba(255,215,0,.35);animation:gold-shimmer 3s ease infinite;
+  }
+  .kanye-message .msg-text{
+    font-size:14px;color:var(--gold-bright);font-weight:700;line-height:1.7;
+    text-shadow:0 0 10px rgba(255,215,0,.4);
+  }
+
+  /* 海报预览 */
+  .poster-preview{
+    border:1px solid rgba(255,215,0,.3);border-radius:10px;overflow:hidden;
+    box-shadow:0 8px 30px rgba(0,0,0,.6);
+  }
+  .poster-preview img{display:block;width:100%}
+  .btn-loading{opacity:.5;pointer-events:none;animation:none}
+
+  /* ===== 大金链子细节 ===== */
+  .chain-link{filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.8)) drop-shadow(0 0 3px rgba(255,215,0,.28))}
+  .chain-medallion{filter:drop-shadow(0 12px 9px rgba(0,0,0,.9)) drop-shadow(0 0 11px rgba(255,215,0,.65)) drop-shadow(0 0 26px rgba(255,215,0,.3))}
+  .sparkle{animation:twinkle 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .sparkle.s2{animation-delay:.7s}
+  .sparkle.s3{animation-delay:1.4s}
+  @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.55)}50%{opacity:1;transform:scale(1.15)}}
+
+  /* ===== 结果页：名字主标题 + code 次级徽章 ===== */
+  .code-badge{
+    display:inline-block;font-family:'Oswald',monospace;font-size:10px;letter-spacing:.14em;
+    color:var(--gold);background:linear-gradient(180deg,#1a1a1a,#000);
+    border:1px solid rgba(255,215,0,.45);border-radius:4px;padding:2px 9px;
+    box-shadow:inset 0 1px 0 rgba(255,215,0,.18),0 1px 3px rgba(0,0,0,.7);
+  }
+  .hero-name{
+    font-family:'ZCOOL KuaiLe','Noto Sans SC',sans-serif;
+    background:linear-gradient(180deg,#FFF4B0 0%,#FFD700 38%,#b8860b 58%,#FFE98A 78%,#7a5d00 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 16px rgba(255,215,0,.45)) drop-shadow(0 3px 2px rgba(0,0,0,.9));
+  }
+  .hero-quote{color:var(--neon);text-shadow:0 0 9px rgba(57,255,20,.4)}
+  .dim-row{display:flex;align-items:center;gap:8px}
+  .dim-bar{height:3px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;flex:1}
+  .dim-bar > div{height:100%;border-radius:999px;background:linear-gradient(90deg,#8a6d00,#FFD700);box-shadow:0 0 6px rgba(255,215,0,.35)}
+  .kanye-mode .hero-name{
+    background:linear-gradient(180deg,#FFF4B0,#FFD700 30%,#B026FF 60%,#FFD700 85%,#FFF4B0);
+    background-size:100% 220%;-webkit-background-clip:text;background-clip:text;
+    animation:rainbow-shimmer 2.8s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .btn-gold,.chain-glow,.chain-wrap,.vinyl,.marquee,.skeleton,.kanye-mode,.kanye-badge,.kanye-mode .metal-text,.kanye-message,.sparkle{animation:none}
+  }
+</style>
+</head>
+<body class="stage-bg spotlight noise min-h-screen">
+  <div class="grid-lines fixed inset-0 pointer-events-none opacity-50"></div>
+
+  <main class="relative max-w-md mx-auto px-5 pt-5 pb-10 z-10">
+
+    <!-- ============ 视图一：首页（独立全屏 Section） ============ -->
+    <section id="screen-home" class="screen active flex-col">
+      <header class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[var(--gold)]" style="box-shadow:0 0 10px rgba(255,215,0,.6)"></span>
+          <span class="font-display text-sm tracking-widest text-[var(--gold)]">UNDERGROUND // LIVE</span>
+        </div>
+        <span class="text-[10px] text-[var(--muted)] font-mono">EST. 2026</span>
+      </header>
+
+      <div class="overflow-hidden border-y border-[var(--line)] py-1.5 mb-4">
+        <div class="marquee text-[11px] text-[var(--muted)] font-mono uppercase">
+          <span>● MIC CHECK 1-2</span><span>● 15 道题解锁厂牌</span><span>● KEEP IT REAL</span><span>● PUNCHLINE LOADING</span><span>● GOLD CHAIN ACTIVE</span>
+          <span>● MIC CHECK 1-2</span><span>● 15 道题解锁厂牌</span><span>● KEEP IT REAL</span><span>● PUNCHLINE LOADING</span><span>● GOLD CHAIN ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="chain-wrap flex justify-center -mt-3 px-1">
+        <svg viewBox="0 0 360 214" class="w-full max-w-[368px] chain-glow" aria-hidden="true">
+          <defs>
+            <!-- 古巴链环：黄金高光→主金→暗金 多段金属渐变（固定光源，环旋转时立体感真实） -->
+            <linearGradient id="cubanGold" x1="0" y1="0" x2="360" y2="214" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#4a3900"/>
+              <stop offset=".14" stop-color="#c99700"/>
+              <stop offset=".3" stop-color="#FFF8DC"/>
+              <stop offset=".44" stop-color="#FFD700"/>
+              <stop offset=".58" stop-color="#9a7600"/>
+              <stop offset=".74" stop-color="#FFE98A"/>
+              <stop offset=".88" stop-color="#d4a700"/>
+              <stop offset="1" stop-color="#3f3000"/>
+            </linearGradient>
+            <!-- 巨大吊坠牌面：径向立体黄金 -->
+            <radialGradient id="plaqueGold" cx="36%" cy="22%" r="95%">
+              <stop offset="0" stop-color="#fffbe0"/>
+              <stop offset=".26" stop-color="#FFE98A"/>
+              <stop offset=".5" stop-color="#FFD700"/>
+              <stop offset=".74" stop-color="#c99700"/>
+              <stop offset=".93" stop-color="#8a6d00"/>
+              <stop offset="1" stop-color="#4a3900"/>
+            </radialGradient>
+            <!-- 铭牌 3D 文字金属渐变 -->
+            <linearGradient id="textGold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#FFF8DC"/>
+              <stop offset=".38" stop-color="#FFE15A"/>
+              <stop offset=".55" stop-color="#FFD700"/>
+              <stop offset=".72" stop-color="#b8860B"/>
+              <stop offset="1" stop-color="#6b5200"/>
+            </linearGradient>
+            <!-- 铆钉小钻 -->
+            <radialGradient id="rivetGold" cx="32%" cy="28%" r="80%">
+              <stop offset="0" stop-color="#fffbe0"/>
+              <stop offset=".55" stop-color="#FFD700"/>
+              <stop offset="1" stop-color="#6b5200"/>
+            </radialGradient>
+          </defs>
+
+          <!-- U 型悬挂弧轨（两端伸出屏幕上方，底部平缓承托吊坠），链环由 JS 沿轨生成 -->
+          <path id="chain-rail" d="M -6 4 C 24 88, 84 124, 180 126 C 276 124, 336 88, 366 4"
+                fill="none" stroke="none"/>
+          <g id="chain-links"></g>
+
+          <!-- 巨大的 RATI 金铭牌吊坠（U 型最底部视觉中心） -->
+          <g class="chain-medallion">
+            <!-- 挂扣：最后一节加粗古巴链环 -->
+            <g transform="translate(180,126)">
+              <rect x="-7.5" y="-11" width="15" height="22" rx="7.5" fill="#050401" stroke="#2a2000" stroke-width="5.2"/>
+              <rect x="-7.5" y="-11" width="15" height="22" rx="7.5" fill="none" stroke="url(#cubanGold)" stroke-width="3.2"/>
+              <rect x="-4" y="-7.6" width="8" height="15.2" rx="4" fill="none" stroke="#5f4a00" stroke-width=".7"/>
+              <path d="M-4.6 -7.8 A5 4 0 0 1 4.6 -7.8" fill="none" stroke="#fffbe0" stroke-width=".9" opacity=".9"/>
+            </g>
+
+            <!-- 接触阴影：吊坠悬在链子前方，顶部压出一道暗影体现前后景深 -->
+            <ellipse cx="180" cy="140" rx="78" ry="7" fill="#000" opacity=".55"/>
+
+            <!-- 牌身：深色外沿 + 厚金面 -->
+            <rect x="90" y="138" width="180" height="70" rx="13" fill="#1c1500"/>
+            <rect x="94" y="140" width="172" height="66" rx="11" fill="url(#plaqueGold)" stroke="#6b5200" stroke-width="1.4"/>
+            <!-- 顶部弧面高光 -->
+            <path d="M104 148 Q 180 140 256 148" fill="none" stroke="#fffbe0" stroke-width="1.4" opacity=".75"/>
+            <!-- 主体字上下装饰刻线 -->
+            <line x1="116" y1="161" x2="244" y2="161" stroke="rgba(90,69,0,.55)" stroke-width="1"/>
+            <!-- 四角铆钉 -->
+            <g fill="url(#rivetGold)" stroke="#4a3900" stroke-width=".5">
+              <circle cx="104" cy="149" r="2.4"/><circle cx="256" cy="149" r="2.4"/>
+              <circle cx="104" cy="197" r="2.4"/><circle cx="256" cy="197" r="2.4"/>
+            </g>
+
+            <!-- 牌面文字：顶部小刻字（实物铭牌细节） -->
+            <text x="180" y="155" text-anchor="middle" font-family="Oswald,monospace" font-size="7.5" font-weight="700"
+                  letter-spacing="3.5" fill="#6b5200">UNDERGROUND CERTIFIED</text>
+
+            <!-- 主体大字 PEACE：金属凸起 -->
+            <text x="180" y="186" text-anchor="middle" font-family="Oswald,sans-serif" font-size="38" font-weight="900"
+                  letter-spacing="2.5" fill="url(#textGold)" stroke="#3f3000" stroke-width="3.4" paint-order="stroke"
+                  style="filter:drop-shadow(0 2px 0 #5a4500) drop-shadow(0 4px 4px rgba(0,0,0,.85))">PEACE</text>
+
+            <!-- 主体字正下方：极小金属编号字（对标 RICH 2/25） -->
+            <text x="180" y="201" text-anchor="middle" font-family="Oswald,monospace" font-size="9.5" font-weight="700"
+                  letter-spacing="2.6" fill="url(#textGold)" stroke="#3f3000" stroke-width=".5" paint-order="stroke">— VOL. 16 —</text>
+
+            <!-- 牌面闪烁星光 -->
+            <path class="sparkle" d="M0,-6 L1.4,-1.4 L6,0 L1.4,1.4 L0,6 L-1.4,1.4 L-6,0 L-1.4,-1.4 Z" transform="translate(112,172)" fill="#fffbe0"/>
+            <path class="sparkle s2" d="M0,-6 L1.4,-1.4 L6,0 L1.4,1.4 L0,6 L-1.4,1.4 L-6,0 L-1.4,-1.4 Z" transform="translate(248,172)" fill="#fffbe0"/>
+            <path class="sparkle s3" d="M0,-4 L1,-1 L4,0 L1,1 L0,4 L-1,1 L-4,0 L-1,-1 Z" transform="translate(238,147)" fill="#fffbe0"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="flex-1 flex flex-col justify-center text-center -mt-2">
+        <p class="text-[11px] tracking-[0.4em] text-[var(--muted)] mb-3">UNDERGROUND LABEL TEST</p>
+        <h1 class="font-impact text-6xl sm:text-7xl leading-[0.92]">
+          <span class="block metal-text glitch" data-text="RATI">RATI</span>
+          <span class="block font-graff text-xl text-white/85 mt-2">你的 rapper 人格</span>
+        </h1>
+        <p class="text-sm text-[var(--muted)] mt-4 leading-relaxed px-2">
+          15 道题测出你的地下厂牌人格<br/>
+          厂牌、人设、签名 flow 一键掉落
+        </p>
+
+        <div class="grid grid-cols-3 gap-2 mt-5">
+          <div class="chip rounded-md py-2"><div class="font-display text-xl metal-text">15</div><div class="text-[10px] text-[var(--muted)]">道题</div></div>
+          <div class="chip rounded-md py-2"><div class="font-display text-xl metal-text">16</div><div class="text-[10px] text-[var(--muted)]">厂牌</div></div>
+          <div class="chip rounded-md py-2"><div class="font-display text-xl metal-text">∞</div><div class="text-[10px] text-[var(--muted)]">flow</div></div>
+        </div>
+      </div>
+
+      <div class="space-y-2.5 mt-6">
+        <button id="btn-start" class="btn-gold w-full py-4 rounded-md font-display text-2xl">开始测试 ▸</button>
+        <p class="text-[10px] text-center text-[var(--muted)] leading-relaxed mt-1">
+          本测试仅供娱乐，结果不代表艺人真实性格
+        </p>
+      </div>
+
+      <footer class="mt-8 text-center text-[10px] text-[var(--muted)] font-mono">
+        © STREET RESEARCH DEPT. · NOT AFFILIATED WITH ANY REAL LABEL
+      </footer>
+    </section>
+
+    <!-- ============ 视图二：答题页（独立全屏 Section） ============ -->
+    <section id="screen-quiz" class="screen flex-col">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-[11px] font-mono text-[var(--muted)]" id="q-counter">第 01 / 15 题</span>
+        <button id="btn-back" class="text-[11px] font-mono text-[var(--gold)]/70">← 上一题</button>
+      </div>
+      <div class="progress-track mb-5"><div id="progress-bar" class="progress-bar" style="width:3.33%"></div></div>
+
+      <div id="quiz-card" class="q-card flex-1 flex flex-col">
+        <p class="text-[11px] tracking-[0.3em] text-[var(--gold)] mb-2" id="q-tag">QUESTION 01</p>
+        <h2 id="q-text" class="font-graff text-2xl leading-snug text-white mb-6">题干加载中…</h2>
+        <div id="q-options" class="space-y-2.5 flex-1"></div>
+      </div>
+
+      <div class="flex items-center justify-between mt-6 pt-4 border-t border-[var(--line)]">
+        <span class="text-[10px] text-[var(--muted)] font-mono" id="answer-state">未作答</span>
+        <span class="text-[10px] text-[var(--muted)] font-mono">点选项自动跳下一题</span>
+      </div>
+    </section>
+
+    <!-- ============ 视图三：加载页（独立全屏 Section） ============ -->
+    <section id="screen-loading" class="screen flex-col items-center justify-center text-center">
+      <div class="flex-1 flex flex-col items-center justify-center gap-9">
+        <div class="vinyl"></div>
+        <div>
+          <p class="font-display text-xl metal-text mb-1" id="loading-text">正在为你计算 Punchline...</p>
+          <p class="text-[11px] text-[var(--muted)] font-mono">DROP THE BEAT · STAY TIGHT</p>
+        </div>
+        <div class="flex gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--gold)] animate-pulse"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--gold)] animate-pulse" style="animation-delay:.2s"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--gold)] animate-pulse" style="animation-delay:.4s"></span>
+        </div>
+      </div>
+      <p class="text-[10px] text-[var(--muted)] mt-10">请勿锁屏 · 厂牌主理人正在路上</p>
+    </section>
+
+    <!-- ============ 视图四：结果页（独立全屏 Section） ============ -->
+    <section id="screen-result" class="screen flex-col">
+      <div id="result-content" class="pt-1"><!-- 由 JS 注入 --></div>
+    </section>
+  </main>
+
+<script>
+/* ================= 题库：15 道生活场景题 × 4 选项 × 3 字母加分 =================
+   维度：
+   - 能量：张扬(E) vs 内敛(I)
+   - 内核：感性(F) vs 理性(T)
+   - 态度：锐利(S) vs 随性(C)
+   - 精神：写实(R) vs 抽象(A)
+*/
+const QUESTIONS = [
+  { tag:'QUESTION 01', q:'深夜你确认自己买的彩票中了500万（税后400万），此时你的第一反应是？',
+    options:[
+      {k:'A', t:'立刻给老板发"世界那么大，我不干了"，清空购物车，请兄弟去最贵的夜店狂欢，钱花完再赚！', letters:['E','F','C']},
+      {k:'B', t:'谁都不说，连爸妈都瞒着。默默把房贷车贷还清，存死期吃利息，明天照常挤地铁上班。', letters:['I','T','R']},
+      {k:'C', t:'先把傻逼老板炒了！但钱不乱花，给家人做体检买保险，剩下作为"随时离职的底气"，慢慢规划。', letters:['E','S','R']},
+      {k:'D', t:'买张去大理的单程票，租个小院子，跟所有人断绝联系，每天发呆、搞点抽象艺术，彻底摆烂。', letters:['I','F','A']},
+    ]},
+  { tag:'QUESTION 02', q:'周一早会，老板突然点名让你"讲两句对项目的看法"，你？',
+    options:[
+      {k:'A', t:'站起来就是一顿输出，观点犀利直接怼现状，会议室鸦雀无声。', letters:['E','S','R']},
+      {k:'B', t:'推推眼镜，掏出昨晚熬夜做的5页PPT，逐条数据论证，没人能反驳。', letters:['I','T','A']},
+      {k:'C', t:'借机飙一段脱口秀，把老板也cue进来，全场笑翻，主题偏到九霄云外。', letters:['E','F','C']},
+      {k:'D', t:'"嗯我还在思考阶段..."全程低头狂记笔记，绝不抬头跟老板对视。', letters:['I','F','R']},
+    ]},
+  { tag:'QUESTION 03', q:'朋友群里突然发了张你大一军训的丑照，3秒内你？',
+    options:[
+      {k:'A', t:'立刻回怼一张他更丑的，配文"要互相伤害吗"，开战。', letters:['E','S','C']},
+      {k:'B', t:'默默把图保存进相册，记在小本本上，等他下次发朋友圈时精准爆破。', letters:['I','T','R']},
+      {k:'C', t:'转发到所有共同群，置顶嘲讽"各位请欣赏野生写真"，整活到飞起。', letters:['E','F','A']},
+      {k:'D', t:'装死不回，把消息免打扰，关掉手机抱着枕头装作什么都没发生。', letters:['I','F','C']},
+    ]},
+  { tag:'QUESTION 04', q:'暧昧对象突然冷暴力3天不回消息，你？',
+    options:[
+      {k:'A', t:'直接call过去质问"你什么意思"，三句话把话说清楚，行就行不行拉倒。', letters:['E','S','R']},
+      {k:'B', t:'反复翻聊天记录找自己说错的话，emo到凌晨4点，写500字小作文删了又写。', letters:['I','F','A']},
+      {k:'C', t:'行，那就比谁更冷漠。朋友圈更新得比谁都勤，跟其他异性疯狂合照。', letters:['E','T','A']},
+      {k:'D', t:'冷静分析对方最近的状态——是不是工作压力大？是不是被前任找？理性做SWOT。', letters:['I','T','R']},
+    ]},
+  { tag:'QUESTION 05', q:'商场试穿一双3000块的鞋，确实好看，但你卡里只有4000，你？',
+    options:[
+      {k:'A', t:'当场刷卡，反正下个月工资发，先用着爽。明天的烦恼明天再说。', letters:['E','F','C']},
+      {k:'B', t:'试完默默放回去，回家打开某宝搜同款，找到200块平替下单。', letters:['I','T','R']},
+      {k:'C', t:'拍照发朋友圈"集赞打折"，配文"懂的都懂"，等老板/对象给报销。', letters:['E','S','A']},
+      {k:'D', t:'拍照留念，回家画一张一样的挂墙上，告诉自己精神富足就够了。', letters:['I','F','A']},
+    ]},
+  { tag:'QUESTION 06', q:'凌晨2点，一个人躺在床上死活睡不着，你？',
+    options:[
+      {k:'A', t:'起来给兄弟打电话"睡没？出来撸串"，强行把人拽出家门。', letters:['E','F','C']},
+      {k:'B', t:'戴上耳机听老歌，翻相册看十年前的照片，眼眶莫名其妙湿了。', letters:['I','F','R']},
+      {k:'C', t:'打开备忘录记下突然想到的方案/灵感，列to-do list，亢奋得像打了鸡血。', letters:['I','T','A']},
+      {k:'D', t:'起来冲个凉水澡，撸100个俯卧撑，自我PUA"今天就是不够累"。', letters:['E','S','R']},
+    ]},
+  { tag:'QUESTION 07', q:'同事群里甩锅，老板@你要个说法，你？',
+    options:[
+      {k:'A', t:'直接群里开怼，截图聊天记录拉时间线，一句"这锅我不背"甩回去。', letters:['E','S','R']},
+      {k:'B', t:'私聊同事"咱们别在群里撕"，整理3页word文档私下同步老板，留好退路。', letters:['I','T','A']},
+      {k:'C', t:'群里发个表情包化解尴尬，再甩个段子把话题带偏，大家哈哈一笑就过去了。', letters:['E','F','C']},
+      {k:'D', t:'默默接下这口锅，心里骂完继续改方案，下班路上骂同事祖宗十八代。', letters:['I','F','R']},
+    ]},
+  { tag:'QUESTION 08', q:'朋友失恋，半夜2点打电话哭诉3小时，你？',
+    options:[
+      {k:'A', t:'立刻穿衣服下楼接他，带去烧烤摊灌酒，第二天上班直接翘班陪着。', letters:['E','F','C']},
+      {k:'B', t:'边听边在备忘录里给对方做"前任缺点清单"，理性分析+提出复盘方案。', letters:['I','T','R']},
+      {k:'C', t:'在电话里跟他对骂那个前任，骂得比他还凶，挂了电话骂累了睡得特香。', letters:['E','S','A']},
+      {k:'D', t:'嗯嗯啊啊应付，凌晨3点困得神志不清，但他还在哭你也不好意思挂。', letters:['I','T','C']},
+    ]},
+  { tag:'QUESTION 09', q:'第一次约会，对方问"今晚吃什么"，你？',
+    options:[
+      {k:'A', t:'"我订了那家网红店，7点见，dress code知道吧？"提前定好一切，掌控全局。', letters:['E','S','R']},
+      {k:'B', t:'"都行，你想吃啥？我都可以配合。"把决定权完全交给对方，自己随意。', letters:['I','F','C']},
+      {k:'C', t:'"走，带你尝个我发现的苍蝇馆子，老板是我朋友，必不踩雷。"顺便吹个牛。', letters:['E','T','C']},
+      {k:'D', t:'"去我租的小区楼下撸串吧，顺便看看我养的猫。"随性到家，主打真实。', letters:['I','T','A']},
+    ]},
+  { tag:'QUESTION 10', q:'周五下班发现卡里只剩50块过周末，你？',
+    options:[
+      {k:'A', t:'立刻发朋友圈"兄弟们今晚我主场"，找人AA撸串，反正能蹭到一顿是一顿。', letters:['E','F','C']},
+      {k:'B', t:'50块买5包泡面+1袋榨菜，窝家里打游戏刷剧，谁喊都不出门。', letters:['I','T','R']},
+      {k:'C', t:'直接找老板借500预支工资，下周再还，"信用也是生产力"。', letters:['E','S','R']},
+      {k:'D', t:'用50买张刮刮乐，赌一把周末翻身，输了再说，万一呢。', letters:['I','F','A']},
+    ]},
+  { tag:'QUESTION 11', q:'老板突然给你批了2周带薪假，你？',
+    options:[
+      {k:'A', t:'朋友圈炫"说走就走"，当天订机票飞云南，一天8条刷屏。', letters:['E','F','C']},
+      {k:'B', t:'列14天计划表，每天精确到小时，学习+健身+读书，绝不让一天虚度。', letters:['I','T','R']},
+      {k:'C', t:'一个人买张绿皮火车票穷游三个城市，住青旅跟天南海北的陌生人拼饭拼车，每天拍一条整活短视频打卡。', letters:['E','S','A']},
+      {k:'D', t:'关掉手机拉黑工作群，宅家里15天不洗头不出门，主打一个摆烂到底。', letters:['I','F','A']},
+    ]},
+  { tag:'QUESTION 12', q:'公司团建，主持人突然点名让你上台表演节目，你？',
+    options:[
+      {k:'A', t:'直接走上台，接过麦克风来一段讽刺加班、画饼、强制团建的即兴Diss，把全场同事和老板都炸懵，你觉得这才叫Keep it real。', letters:['E','S','R']},
+      {k:'B', t:'借口去卫生间，实则躲进隔间戴上耳机听自己的歌单，等外面彻底安静了再偷偷溜回去，觉得这种社交简直是精神内耗。', letters:['I','T','A']},
+      {k:'C', t:'压根不在乎面子，直接拉上身边最倒霉的同事一起跳个土味广场舞，主打一个"要死大家一起死"，只要气氛到了就行。', letters:['E','C','F']},
+      {k:'D', t:'硬着头皮上去唱了一首伤感情歌，全程眼神闪躲、声音发抖，下台后立马掏出手机给朋友发消息："我想离职了，刚才丢死人了"。', letters:['I','F','R']},
+    ]},
+  { tag:'QUESTION 13', q:'朋友的对象突然加你微信，说要"聊聊你朋友的事"，你？',
+    options:[
+      {k:'A', t:'直接问"是出轨了还是借钱了？"三句话切入正题，不想绕弯子。', letters:['E','S','R']},
+      {k:'B', t:'装傻"我不清楚啊"，截图发给朋友告状，让对方先表态。', letters:['I','T','A']},
+      {k:'C', t:'顺着聊，结果聊了2小时，最后发现对方只是无聊想找人吐槽。', letters:['E','F','A']},
+      {k:'D', t:'"我最近挺忙的，下次再说。"礼貌拒绝后拉黑，跟朋友绝口不提。', letters:['I','F','C']},
+    ]},
+  { tag:'QUESTION 14', q:'你婚礼上，三姑六婆围着你"啥时候要孩子啊，再不生就晚啦"，你？',
+    options:[
+      {k:'A', t:'"等我混出个人样再生！"一句话怼回去，气场全开。', letters:['E','S','R']},
+      {k:'B', t:'"我们还在拼事业呢，先攒奶粉钱。"礼貌官方回复，端茶送客。', letters:['I','T','C']},
+      {k:'C', t:'"看缘分吧，缘分到了说不定明天就怀了哈哈。"整活到长辈怀疑人生。', letters:['E','F','A']},
+      {k:'D', t:'默默端茶不接话，把话题转移到"您家孙子期末考几分啊"，反客为主。', letters:['I','F','R']},
+    ]},
+  { tag:'QUESTION 15', q:'面试官问"你最大的缺点是什么？"你？',
+    options:[
+      {k:'A', t:'"我最大的缺点是太较真，工作起来不要命，老板都喜欢我。"凡尔赛式回答，自信到飞起。', letters:['E','S','A']},
+      {k:'B', t:'"我对细节要求比较高，可能影响效率，但我正在改进。"中规中矩，4A面试必备话术。', letters:['I','T','R']},
+      {k:'C', t:'"缺点就是缺点太多说不完，要不我给您写本书？"整活开撩，反正也面不上。', letters:['E','F','C']},
+      {k:'D', t:'实诚回答"我有时候拖延症比较严重"，说完就开始后悔说错话。', letters:['I','F','R']},
+    ]},
+];
+
+/* ================= 16 型 Rapper 结果映射 =================
+   代码构成：E/I · F/T · S/C · R/A
+   平局取第一个字母（E/F/S/R 优先）
+   ITCA = Kanye 为 1% 隐藏款
+*/
+const RESULTS = {
+  EFSR:{ name:'GAI', tag:'江湖掌门人', analysis:'你天生自带"大哥"气场，兄弟有事你绝对第一个冲。你极重面子，更重情义。但别看你平时在外面拽得不行，私底下其实是个超级恋爱脑，对亲近的人掏心掏肺。你这辈子的软肋就是吃软不吃硬，为了维护自己人的利益，你可以随时跟世界翻脸。', hidden:false },
+  EFSA:{ name:'万妮达', tag:'说唱女王', analysis:'你是天生的大女主/大男主。别人的评价对你来说就是一阵风，你只做自己觉得酷的事。你的穿搭、你的审美，都在向世界宣告：别惹我，我很美也很贵。在感情和职场里，你绝不内耗，一旦发现对方不真诚，你绝对抽身得比谁都快。你只为自己而活。', hidden:false },
+  EFCR:{ name:'艾热', tag:'六边形战士', analysis:'你是朋友圈里的知心大姐/大哥，情绪价值拉满。谁和谁吵架了，都是你在中间调解；谁有困难了，你总是第一个安慰。你什么都懂一点，做事面面俱到，但有时候，你太在意别人的感受，反而委屈了自己。请记住，你也需要偶尔卸下"全能"的伪装，抱抱自己。', hidden:false },
+  EFCA:{ name:'马思唯', tag:'成都Boy的浪漫', analysis:'你身上散发着一种"老子不费力气也能赢"的松弛感。你讨厌内卷，人生信条是"开心就好"。在大家为了KPI焦头烂额时，你总是能一边摸鱼一边把活干完。谈恋爱时你是个满级选手，懒洋洋的，但总能精准拿捏对方的心思。你的存在，就是对"卷王"最大的嘲讽。', hidden:false },
+  ETSR:{ name:'杨和苏', tag:'健身房大魔王', analysis:'好胜心刻在你的DNA里。别人周末躺平，你在默默举铁、学习、充电。你极度自律，对自己狠得下心，但也因此在人际关系中有时显得有些"直男"，容易得罪人。你习惯用强势来掩饰内心的不安，其实你非常渴望被认可。别太累，你已经做得很好了。', hidden:false },
+  ETSA:{ name:'弹壳', tag:'说唱悍匪/老板', analysis:'你是一个极度务实且有野心的人。你不喜欢画大饼，更喜欢直接拿结果说话。在你眼里，能用钱解决的事都不是事。你对兄弟仗义，但也绝不允许别人占你便宜。你自带一种"老板"气场，办事效率极高，但偶尔也要学会放松，不要把生活过成谈判桌。', hidden:false },
+  ETCR:{ name:'Key.L刘聪', tag:'长沙江湖流诗人', analysis:'你身上有一种大智若愚的松弛感，外表看着酷酷的，其实内心非常通透。你喜欢随性而为，不爱随波逐流，但在自己在乎的事情上有着绝对的执着。你既能在聚会里喝着茶（或酒）和大家谈笑风生，也能一个人安静地待在街头观察生活。你的生活哲学是：不争不抢，但绝对要有自己的态度。你的存在，就像长沙的晚风，舒适但带着一股江湖气。', hidden:false },
+  ETCA:{ name:'Top barry', tag:'抽象整活小王子', analysis:'你的精神状态领先全人类100年。你的朋友圈像个精神病院，大家都觉得你是个毫无逻辑的"疯子"，但身边的人就是离不开你。你不按套路出牌，经常把别人搞得一头雾水。其实"抽象"只是你的保护色，当你真正认真起来的时候，绝对能惊艳所有人。', hidden:false },
+  IFSR:{ name:'Asen', tag:'小镇忧郁青年', analysis:'你是个念旧的人。深夜总是容易emo，会想起多年前的一个下午，或者故乡的某条老街。你习惯了默默努力，不太喜欢到处宣扬自己的计划。在外人看来你有些冷漠，但真正懂你的人知道你内心有多么细腻柔软。你带着一种宿命感，在现实和理想之间默默前行。', hidden:false },
+  IFSA:{ name:'Yamy', tag:'酷飒拽姐', analysis:'你天生一副生人勿近的脸，其实是个深度社恐。你绝不迎合主流审美，只穿自己喜欢的衣服，哪怕别人说你"怪"。在感情里，你很有边界感，如果对方让你觉得不舒服，你会立刻开启防御机制。你不需要所有人都懂你，因为你本来就只打算独自美丽。', hidden:false },
+  IFCR:{ name:'王以太', tag:'爵士说唱诗人', analysis:'你是一个内心极其细腻的文艺青年。你不太擅长在人多的地方发言，但你的内心有一片汪洋大海。你喜欢用文字、音乐或照片记录生活，对美感有极高的要求。你看起来很难接近，但其实你的温柔是骨子里的，懂你的人都会觉得你是个无价之宝。', hidden:false },
+  IFCA:{ name:'法老', tag:'硬核发疯哲学家', analysis:'你是典型的"白天嘻嘻哈哈，晚上思考人生"。你用沙雕、搞笑和整活来掩饰自己对世界的深刻思考。你经常会在半夜反思人生的意义，容易内耗。但你本质是一个极其善良和正义的人，你的"发疯"只是你对这个无聊世界的一种抵抗方式。', hidden:false },
+  ITSR:{ name:'Rapeter', tag:'说唱做题家', analysis:'你是个极致的细节控。你的生活有明确的Plan A和Plan B。你讨厌失控的感觉，做任何事都会提前规划好，甚至连出门旅行都要做成Excel。在别人眼里你是个靠谱的"学霸"，但只有你自己知道，对完美的极致追求，让你活得有多累。适当放下计划，允许意外发生吧。', hidden:false },
+  ITSA:{ name:'那奇沃夫', tag:'狼王', analysis:'你是个直来直去的人，绝不拐弯抹角。遇到不公平的事，你绝对是第一个拍桌子的人。你的执行力极强，做事雷厉风行，极度讨厌拖泥带水。别人觉得你咄咄逼人，但你知道，这只是因为你不想浪费时间在虚伪的客套上。你的攻击性，是你保护自己和提升效率的武器。', hidden:false },
+  ITCR:{ name:'PG1', tag:'曾经的天才少年', analysis:'你身上总有一种不属于当下的破碎感。你有着极高的天赋，但也可能因此付出过代价。你不太喜欢合群，宁愿一个人呆着也不想讨好世界。你有一段难忘的过去，它塑造了现在这个冷峻又独立的你。你不轻易相信别人，但一旦认定了，就会死心塌地。', hidden:false },
+  ITCA:{ name:'Kanye', tag:'疯子天才', analysis:'恭喜你触发1%的隐藏款。你是个矛盾体。在旁人眼里，你是个不可理喻的"疯子"，但只有你自己清楚你脑子里那些足以改变世界的宏大构想。你极度自我，甚至有点自恋，但你的才华绝对配得上你的野心。你要么在创造历史，要么在发疯的路上。你的精神状态，常人难以企及。', hidden:true },
+};
+
+/* ================= 16 型犀利短评（结果页 & 海报共用） ================= */
+const QUOTES = {
+  EFSR:'江湖规矩，老子定的。',
+  EFSA:'我很贵，也很美。',
+  EFCR:'全场的情绪，我包了。',
+  EFCA:'老子不费力，也能赢。',
+  ETSR:'自律，是我唯一的信仰。',
+  ETSA:'别画饼，拿结果说话。',
+  ETCR:'有我的局，不会冷。',
+  ETCA:'我的精神状态，领先人类一百年。',
+  IFSR:'故乡的风，还在吹我。',
+  IFSA:'怪？我只是懒得迎合。',
+  IFCR:'心里有海，不必声张。',
+  IFCA:'白天整活，夜里思考宇宙。',
+  ITSR:'失控？我的字典里没有。',
+  ITSA:'少废话，直接拍桌子。',
+  ITCR:'破碎过，才够锋利。',
+  ITCA:'我不是疯子，我是未来。',
+};
+
+/* ================= Mock Verse 数据（16 型专属歌词） ================= */
+const MOCK_VERSES = {
+  EFSR:['掌门登场气场冲，兄弟有难我先拢','面子比命还要重，外壳藏着恋爱梦','吃软不吃硬到底，江湖规矩我说东','世界翻脸也从容，GAI的flow就是龙'],
+  EFSA:['大女主登场太贵，别人评价当风吹','穿搭宣告我很美，感情不真诚就撤','为自己活到起飞，万妮达从不吃亏','说唱女王的位，谁来都得退'],
+  EFCR:['六边形战士全满，调解全场不嫌烦','情绪价值我包办，谁有困难我都管','太在意别人看，委屈自己谁来赞','艾热的温柔不散，抱抱自己最划算'],
+  EFCA:['松弛感自带光芒，摸鱼也能赢全场','恋爱满级懒洋洋，精准拿捏不慌张','马思唯的腔调响，不卷不争我最狂','嘲讽卷王到天亮，成都Boy的浪漫'],
+  ETSR:['好胜心刻在灵魂，周末举铁不嫌闷','自律狠下心不分，强势掩饰不安分','直男也得罪人，渴望被认可的人','杨和苏的大魔王身份，别太累你已够稳'],
+  ETSA:['悍匪老板气场高，结果说话不画猫','仗义兄弟不让咬，办事效率我最挑','弹壳的野心不倒，能用钱解决的都搞','别把生活过成谈判桌，放松一下才好'],
+  ETCR:['派对动物不冷场，穿搭永远在线上','荷尔蒙四处放，暧昧满分我最狂','TizzyT的阳光，朋友多但心难闯','想让我安定下，可没那么容易的事'],
+  ETCA:['精神状态领先百年，朋友圈像精神病院','整活出牌不按线，认真起来能惊艳','Top barry的抽象面，保护色下真天才','不按套路出牌，常人难懂我的帅'],
+  IFSR:['念旧emo到天亮，故乡老街在心上','默默努力不声张，细腻柔软是内行','Asen的宿命感，现实理想之间趟','小镇忧郁青年样，懂我的人不多但强'],
+  IFSA:['生人勿近脸太拽，深度社恐我不爱','边界感强我自在，独自美丽我最帅','Yamy不迎合审美的怪，只穿自己喜欢的派','不需要所有人明白，我本就独自美丽在'],
+  IFCR:['爵士说唱诗人调，内心汪洋没人到','文字音乐记喜好，美感要求我最高','王以太的温柔妙，看起来难接近的罩','懂我的人会知道，我是无价之宝'],
+  IFCA:['白天嘻嘻哈哈笑，晚上思考人生道','沙雕整活是外套，发疯抵抗无聊燥','法老的善良底，正义骨子里的好','对无聊世界的抵抗，这就是我的样'],
+  ITSR:['做题家Plan都懂，旅行Excel做到中','完美追求累到痛，放下计划让意外涌','Rapeter的靠谱样，学霸外表下的重','允许意外发生，生活才有意思的涌'],
+  ITSA:['狼王直来直去不绕，不公平事我拍桌叫','雷厉风行不拖掏，攻击性是我的招','那奇沃夫的刀，虚伪客套我都不要','效率武器保护自己，这就是我的道'],
+  ITCR:['天才少年带着伤，不合群也不逞强','难忘过去塑我样，冷峻独立的样','PG1的破碎感，不轻易信人到天亮','一旦认定就死心塌地，这就是我的场'],
+  ITCA:['疯子天才矛盾体，宏大构想没人及','极度自我有点迷，才华野心我都齐','Kanye的隐藏款，精神状态常人难及','要么创造历史，要么发疯到底'],
+};
+
+/* Mock Verse 生成器（保留真实 API 触发接口） */
+function generateMockVerse(code){
+  return MOCK_VERSES[code] || ['Verse生成中…','…','…','…'];
+}
+async function fetchAIVerse(code, ans){
+  // TODO: 接入真实 AI API
+  // const res = await fetch('/api/verse',{method:'POST',body:JSON.stringify({code,answers:ans})});
+  // return (await res.json()).lines;
+  return generateMockVerse(code);
+}
+
+/* ================= CP / Beef 计算引擎 ================= */
+function calculateMatch(code1, code2){
+  let same=0, opposite=0;
+  for(let i=0;i<4;i++){
+    if(code1[i]===code2[i]) same++; else opposite++;
+  }
+  return { same, opposite, synergy:Math.round(same/4*100), beef:Math.round(opposite/4*100) };
+}
+
+function generateCPFlavor(r1, r2, match){
+  if(match.same===4) return { label:'默契度 100%', desc:`${r1.name} × ${r2.name}，双倍${r1.tag}合体，必出神曲！厂牌要炸！` };
+  if(match.same===0) return { label:'牛肉值拉满 100%', desc:`${r1.name} × ${r2.name}，${r1.tag}撞上${r2.tag}，天天打架但绝对火！diss track 预定！` };
+  if(match.synergy>=75) return { label:`默契度 ${match.synergy}%`, desc:`${r1.name} 和 ${r2.name} 气味相投，能凑一首热单。` };
+  if(match.synergy>=50) return { label:`默契 ${match.synergy}% · 牛肉 ${match.beef}%`, desc:`${r1.name} 和 ${r2.name} 亦敌亦友，看点拉满！` };
+  return { label:`牛肉值 ${match.beef}%`, desc:`${r1.name}的${r1.tag}撞上${r2.name}的${r2.tag}，火药味十足！` };
+}
+
+function renderCP(friendCode){
+  const cpBox = $('cp-result');
+  if(!friendCode){
+    cpBox.innerHTML = '<p class="text-[11px] text-[var(--muted)] text-center py-3">↑ 选个朋友的厂牌，测测你们的 CP / Beef</p>';
+    return;
+  }
+  const { code, result } = calcResult(answers);
+  const friend = RESULTS[friendCode];
+  const match = calculateMatch(code, friendCode);
+  const flavor = generateCPFlavor(result, friend, match);
+  const isSynergy = match.synergy >= match.beef;
+  const barColor = isSynergy ? 'cp-bar-synergy' : 'cp-bar-beef';
+  const barWidth = isSynergy ? match.synergy : match.beef;
+
+  cpBox.innerHTML = `
+    <div class="flex items-center gap-3 mb-3">
+      <div class="text-center flex-1">
+        <div class="font-display text-2xl metal-text">${code}</div>
+        <div class="text-[10px] text-[var(--muted)]">你</div>
+      </div>
+      <div class="font-display text-lg ${isSynergy ? 'text-[var(--neon)]' : 'text-[var(--gold)]'}">VS</div>
+      <div class="text-center flex-1">
+        <div class="font-display text-2xl metal-text">${friendCode}</div>
+        <div class="text-[10px] text-[var(--muted)]">${friend.name}</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="flex justify-between text-[10px] mb-1.5">
+        <span class="text-[var(--muted)]">${isSynergy ? '默契度' : '牛肉值'}</span>
+        <span class="${isSynergy ? 'text-[var(--neon)]' : 'text-[var(--gold)]'} font-display tracking-wider">${flavor.label}</span>
+      </div>
+      <div class="cp-bar-track">
+        <div class="${barColor}" style="width:${barWidth}%;height:100%;border-radius:999px;transition:width .6s ease"></div>
+      </div>
+    </div>
+    <div class="chip rounded-md p-3 text-center">
+      <p class="text-xs text-white/85 leading-relaxed">${flavor.desc}</p>
+    </div>
+  `;
+}
+
+/* ================= 地下身份证 / 专辑封面生成（html2canvas + QR） ================= */
+async function generatePoster(){
+  const btn = $('btn-poster');
+  const btnText = btn.textContent;
+  btn.textContent = '正在生成封面...';
+  btn.classList.add('btn-loading');
+
+  const { code, result } = calcResult(answers);
+  const isKanye = !!result.hidden;
+  const quote = QUOTES[code] || '';
+  const verseEls = document.querySelectorAll('#verse-lines .verse-line');
+  const verseLines = verseEls.length
+    ? Array.from(verseEls).map(l => l.textContent.replace(/^♪\s*/, ''))
+    : [];
+  const r = Math.random().toString(36).slice(2,6).toUpperCase();
+  const serial = isKanye ? `RATI-KANYE-${r}` : `RATI-${code}-${r}`;
+  const date = new Date().toLocaleDateString('zh-CN');
+
+  // Verse 错落排版（flow 感）
+  const offsets = [0, 22, 10, 30];
+  const verseHTML = verseLines.length ? `
+    <div style="margin:18px 0 4px;font-size:8px;letter-spacing:3px;color:#7a6a20;font-family:monospace;">— EXCLUSIVE VERSE · AI WRITTEN —</div>
+    <div style="border-left:2px solid #FFD700;padding:8px 0 8px 14px;margin-top:8px;">
+      ${verseLines.map((line,i)=>`<div style="font-size:13px;line-height:2.15;color:${i%2?'#d8d8d8':'#f0e6b8'};padding-left:${offsets[i%4]}px;white-space:nowrap;">♪ ${line}</div>`).join('')}
+    </div>` : '';
+
+  const accent = isKanye ? '#B026FF' : '#FFD700';
+
+  // 构建离屏封面 DOM（全 inline style，保证 html2canvas 还原度）
+  const poster = document.createElement('div');
+  poster.style.cssText = 'position:fixed;left:-9999px;top:0;width:360px;z-index:-1;';
+  poster.innerHTML = `
+    <div style="position:relative;width:360px;overflow:hidden;background:#040404;
+        background-image:repeating-linear-gradient(115deg,rgba(255,215,0,.028) 0 1px,transparent 1px 5px),
+        url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>&quot;);
+        border:1px solid ${isKanye ? 'rgba(176,38,255,.6)' : 'rgba(255,215,0,.4)'};
+        font-family:'Noto Sans SC',sans-serif;color:#f4f4f4;">
+      <!-- 暗角 -->
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(130% 90% at 50% 0%,transparent 40%,rgba(0,0,0,.75) 100%);"></div>
+      <!-- 顶部顶光 -->
+      <div style="position:absolute;top:0;left:0;right:0;height:140px;background:radial-gradient(60% 100% at 50% 0%,${isKanye?'rgba(176,38,255,.14)':'rgba(255,215,0,.12)'},transparent);"></div>
+      <!-- 内框 -->
+      <div style="position:absolute;top:7px;left:7px;right:7px;bottom:7px;border:1px solid ${isKanye ? 'rgba(176,38,255,.25)' : 'rgba(255,215,0,.14)'};pointer-events:none;"></div>
+      <!-- 四角定位标（上下锚定，适配封面高度变化） -->
+      <div style="position:absolute;top:11px;left:11px;font-size:13px;color:${accent};opacity:.7;line-height:1;z-index:2;">+</div>
+      <div style="position:absolute;top:11px;right:11px;font-size:13px;color:${accent};opacity:.7;line-height:1;z-index:2;">+</div>
+      <div style="position:absolute;bottom:30px;left:11px;font-size:13px;color:${accent};opacity:.7;line-height:1;z-index:2;">+</div>
+      <div style="position:absolute;bottom:30px;right:11px;font-size:13px;color:${accent};opacity:.7;line-height:1;z-index:2;">+</div>
+
+      <div style="position:relative;padding:30px 26px 0;">
+        <!-- 顶部卡头 -->
+        <div style="display:flex;align-items:center;gap:9px;">
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,${accent});"></div>
+          <div style="font-size:8px;letter-spacing:3px;color:#a8860b;font-family:monospace;">UNDERGROUND RAP ID CARD</div>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,${accent},transparent);"></div>
+        </div>
+        <div style="text-align:center;font-size:8px;color:#555;letter-spacing:2.5px;margin-top:6px;font-family:monospace;">OFFICIAL RAPPER CERTIFICATE · ${serial}</div>
+
+        <!-- 视觉中心：名号 -->
+        <div style="text-align:center;margin:30px 0 8px;">
+          <div style="font-size:52px;font-weight:900;color:#FFE98A;line-height:1.1;letter-spacing:2px;
+               text-shadow:0 0 22px rgba(255,215,0,.55),0 3px 0 #6b5200,0 6px 10px rgba(0,0,0,.9);
+               font-family:'ZCOOL KuaiLe','Noto Sans SC',sans-serif;">${result.name}</div>
+          <div style="margin-top:12px;display:inline-block;border:1px solid rgba(255,215,0,.4);border-radius:3px;padding:2px 10px;background:#0a0a0a;">
+            <span style="font-size:10px;letter-spacing:2px;color:#c9a227;font-family:monospace;">${code}</span>
+          </div>
+          <div style="font-size:13px;letter-spacing:4px;color:#d9b94a;margin-top:10px;">${result.tag}</div>
+          <div style="font-size:15px;color:${isKanye?'#d69bff':'#8eff7a'};margin-top:14px;font-weight:700;
+               text-shadow:0 0 12px ${isKanye?'rgba(176,38,255,.6)':'rgba(57,255,20,.45)'};">「${quote}」</div>
+        </div>
+
+        ${verseHTML}
+
+        <!-- 虚线分隔 -->
+        <div style="border-top:1px dashed rgba(255,215,0,.25);margin:18px 0 14px;"></div>
+
+        <!-- 底部：ID + 二维码 -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:20px;">
+          <div>
+            <div style="font-size:8px;color:#666;letter-spacing:2px;font-family:monospace;">CERTIFICATE NO.</div>
+            <div style="font-size:13px;color:#FFD700;font-family:monospace;margin-top:3px;font-weight:700;">${serial}</div>
+            <div style="font-size:9px;color:#666;margin-top:6px;font-family:monospace;">ISSUE DATE · ${date}</div>
+            <div style="font-size:9px;color:#777;margin-top:10px;line-height:1.6;">扫码领取你的<br/>地下厂牌人格</div>
+          </div>
+          <div style="background:#fff;padding:4px;border-radius:4px;box-shadow:0 0 14px rgba(255,215,0,.3);">
+            <div id="poster-qr" style="width:64px;height:64px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部条 -->
+      <div style="border-top:1px solid rgba(255,215,0,.25);padding:9px 26px;display:flex;justify-content:space-between;
+           background:linear-gradient(180deg,transparent,rgba(255,215,0,.05));
+           font-size:8px;color:#8a7420;letter-spacing:2.5px;font-family:monospace;">
+        <span>RATI · 地下身份证</span><span>KEEP IT REAL ◆ STREET RESEARCH DEPT.</span>
+      </div>
+
+      ${isKanye ? `
+        <div style="position:absolute;top:52px;right:-34px;transform:rotate(38deg);
+             border:2px solid #FFD700;color:#FFD700;font-size:11px;font-weight:900;letter-spacing:2px;
+             padding:3px 40px;background:rgba(176,38,255,.25);text-shadow:0 0 8px rgba(255,215,0,.8);
+             font-family:monospace;">1% HIDDEN</div>` : ''}
+    </div>
+  `;
+  document.body.appendChild(poster);
+
+  // 生成二维码
+  const qrContainer = poster.querySelector('#poster-qr');
+  if(window.QRCode){
+    qrContainer.innerHTML = '';
+    new QRCode(qrContainer, { text: location.href, width: 64, height: 64, colorDark: '#000000', colorLight: '#ffffff' });
+  }
+
+  try {
+    await new Promise(res => setTimeout(res, 150)); // 等 QR 渲染
+    const canvas = await html2canvas(poster.firstElementChild, { scale: 2, backgroundColor: '#040404', useCORS: true });
+    const img = canvas.toDataURL('image/png');
+    $('poster-preview').innerHTML = `<img src="${img}" alt="地下身份证" class="w-full block"/>`;
+    $('poster-preview').classList.remove('hidden');
+    $('poster-preview').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch(err){
+    console.error('封面生成失败:', err);
+    alert('封面生成失败，请重试');
+  } finally {
+    document.body.removeChild(poster);
+    btn.textContent = btnText;
+    btn.classList.remove('btn-loading');
+  }
+}
+
+/* ================= 首页古巴链：沿 U 型弧轨生成交叠链环 ================= */
+function buildCubanChain(){
+  const rail = $('chain-rail');
+  const layer = $('chain-links');
+  if(!rail || !layer || rail.dataset.built) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const len = rail.getTotalLength();
+  const step = 12.6;                 // 环距 < 环长，强制交叠
+  const count = Math.floor(len / step);
+
+  for(let i = 0; i <= count; i++){
+    const p = rail.getPointAtLength(i * step);
+    const pn = rail.getPointAtLength(Math.min(len, (i + 0.5) * step));
+    const ang = Math.atan2(pn.y - p.y, pn.x - p.x) * 180 / Math.PI;
+    // 古巴链灵魂：相邻链环交替反向扭转
+    const tilt = (i % 2 === 0) ? -16 : 16;
+    // 透视：两侧（切线近垂直）的环略小、略暗，底部正面环最大最亮
+    const edge = Math.min(1, Math.abs(Math.sin(ang * Math.PI / 180)));
+    const scale = 1 - 0.16 * edge;
+    const opacity = 1 - 0.2 * edge;
+
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('transform',
+      `translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${(ang + tilt).toFixed(1)}) scale(${scale.toFixed(2)})`);
+    g.setAttribute('opacity', opacity.toFixed(2));
+    // 单个粗犷链环：暗边厚度 → 黄金拉丝面 → 内孔暗腔 → 顶部镜面高光
+    g.innerHTML =
+      '<rect x="-12.4" y="-6.2" width="24.8" height="12.4" rx="6.2" fill="#050401" stroke="#241b00" stroke-width="5.6"/>' +
+      '<rect x="-12.4" y="-6.2" width="24.8" height="12.4" rx="6.2" fill="none" stroke="url(#cubanGold)" stroke-width="3.5"/>' +
+      '<rect x="-8.6" y="-3.6" width="17.2" height="7.2" rx="3.6" fill="rgba(4,3,0,.92)" stroke="#5f4a00" stroke-width=".75"/>' +
+      '<path d="M-9 -3.4 A10 4.4 0 0 1 9 -3.4" fill="none" stroke="#fffbe0" stroke-width="1.05" opacity=".92"/>';
+    layer.appendChild(g);
+  }
+  rail.dataset.built = '1';
+}
+
+/* ================= 状态与工具 ================= */
+let answers = new Array(QUESTIONS.length).fill(null);
+let idx = 0;
+let isAnimating = false;
+let loadingTimer = null;
+
+const $ = (id) => document.getElementById(id);
+const screens = {
+  home: $('screen-home'),
+  quiz: $('screen-quiz'),
+  loading: $('screen-loading'),
+  result: $('screen-result'),
+};
+
+const LOADING_TEXTS = ['正在为你计算 Punchline...', '正在缝合你的 Hook...', '正在联系地下厂牌...'];
+
+/* 全屏视图切换：仅一个 section 持有 active，切换瞬间回到顶部 */
+function show(name) {
+  Object.values(screens).forEach((s) => s.classList.remove('active'));
+  screens[name].classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function triggerAnim(el, animClass) {
+  el.classList.remove('animate-next', 'animate-back', 'animate-out');
+  void el.offsetWidth;
+  el.classList.add(animClass);
+}
+
+/* ================= 渲染题目 ================= */
+function renderQuestion(dir) {
+  const q = QUESTIONS[idx];
+  $('q-counter').textContent = `第 ${String(idx + 1).padStart(2, '0')} / 15 题`;
+  $('q-tag').textContent = q.tag;
+  const step = 100 / QUESTIONS.length;
+  $('progress-bar').style.width = `${step * idx + step * 0.5}%`;
+  $('q-text').textContent = q.q;
+  $('answer-state').textContent = answers[idx] ? `已选：${answers[idx]}` : '未作答';
+
+  const wrap = $('q-options');
+  wrap.innerHTML = '';
+  q.options.forEach((opt) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt rounded-lg p-3.5';
+    btn.innerHTML = `
+      <span class="opt-badge shrink-0 w-7 h-7 rounded-md grid place-items-center text-sm">${opt.k}</span>
+      <span class="flex-1 text-sm leading-relaxed text-white/90">${opt.t}</span>
+    `;
+    if (answers[idx] === opt.k) btn.classList.add('selected');
+    btn.addEventListener('click', () => choose(opt.k, btn));
+    wrap.appendChild(btn);
+  });
+
+  triggerAnim($('quiz-card'), dir === 'back' ? 'animate-back' : 'animate-next');
+}
+
+/* ================= 选择 & 自动跳题 ================= */
+function choose(k, btn) {
+  if (isAnimating) return;
+  answers[idx] = k;
+  document.querySelectorAll('#q-options .opt').forEach((b) => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  $('answer-state').textContent = `已选：${k}`;
+  isAnimating = true;
+  triggerAnim($('quiz-card'), 'animate-out');
+  setTimeout(() => {
+    if (idx + 1 < QUESTIONS.length) {
+      idx++;
+      renderQuestion('next');
+    } else {
+      $('progress-bar').style.width = '100%';
+      show('loading');
+      startLoadingSequence();
+    }
+    isAnimating = false;
+  }, 270);
+}
+
+/* ================= 计分 & 拼码 ================= */
+function calcResult(ans) {
+  const score = { E: 0, I: 0, F: 0, T: 0, S: 0, C: 0, R: 0, A: 0 };
+  ans.forEach((k, i) => {
+    if (!k) return;
+    const opt = QUESTIONS[i].options.find((o) => o.k === k);
+    if (opt) opt.letters.forEach((l) => score[l]++);
+  });
+  // 平局取第一个字母（E/F/S/R 优先）
+  const e = score.E >= score.I ? 'E' : 'I';
+  const f = score.F >= score.T ? 'F' : 'T';
+  const s = score.S >= score.C ? 'S' : 'C';
+  const r = score.R >= score.A ? 'R' : 'A';
+  const code = e + f + s + r;
+  return { code, result: RESULTS[code], score };
+}
+
+/* ================= 加载页：黑胶旋转 + 文案轮换 ================= */
+function startLoadingSequence() {
+  let i = 0;
+  const el = $('loading-text');
+  el.textContent = LOADING_TEXTS[0];
+  el.style.opacity = '1';
+  clearInterval(loadingTimer);
+  loadingTimer = setInterval(() => {
+    i = (i + 1) % LOADING_TEXTS.length;
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = LOADING_TEXTS[i];
+      el.style.opacity = '1';
+    }, 180);
+  }, 1000);
+
+  // 2.5s 后跳结果页，保证 3 句文案都能露个脸
+  setTimeout(() => {
+    clearInterval(loadingTimer);
+    renderResult();
+    show('result');
+  }, 2500);
+}
+
+/* ================= 结果页：渲染 & 事件 ================= */
+function renderResult() {
+  const { code, result, score } = calcResult(answers);
+  const isKanye = !!result.hidden;
+  const r = Math.random().toString(36).slice(2, 6).toUpperCase();
+  const serial = isKanye ? `UR-KANYE-${r}` : `UR-${code}-${r}`;
+
+  const dims = [
+    { name: '能量', a: 'E', b: 'I' },
+    { name: '内核', a: 'F', b: 'T' },
+    { name: '态度', a: 'S', b: 'C' },
+    { name: '精神', a: 'R', b: 'A' },
+  ];
+  // 弱化为低调横条，不抢主标题风头
+  const dimHTML = dims.map((d) => {
+    const av = score[d.a];
+    const bv = score[d.b];
+    const total = av + bv || 1;
+    const winner = av >= bv ? d.a : d.b;
+    const pct = Math.round(Math.max(av, bv) / total * 100);
+    return `<div class="dim-row">
+      <span class="text-[9px] text-[var(--muted)] w-16 font-mono">${d.name} ${d.a}/${d.b}</span>
+      <div class="dim-bar"><div style="width:${pct}%"></div></div>
+      <span class="text-[9px] text-[var(--muted)] w-14 text-right font-mono">${winner} ${pct}%</span>
+    </div>`;
+  }).join('');
+
+  const quote = QUOTES[code] || '';
+
+  // 朋友结果下拉选项（Mock：列出全部 16 型）
+  const friendOptions = Object.entries(RESULTS)
+    .map(([c, rr]) => `<option value="${c}">${rr.name} · ${rr.tag}（${c}）</option>`)
+    .join('');
+
+  $('result-content').innerHTML = `
+    <div class="text-center mb-4">
+      <p class="text-[11px] tracking-[0.4em] text-[var(--muted)] mb-2">CERTIFICATE · 地下身份证</p>
+      <div class="inline-block gold-border rounded-md px-3 py-1">
+        <span class="font-mono text-[10px] text-[var(--gold)]">${serial}</span>
+      </div>
+      ${isKanye ? '<div class="kanye-badge mt-3">⚡ 1% 稀有隐藏款 ⚡</div>' : ''}
+    </div>
+
+    <!-- ① AI 专属 Verse 生成器（结果页顶部） -->
+    <div class="result-card rounded-xl p-4 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-[11px] tracking-widest text-[var(--muted)]">🎤 AI 专属 Verse 生成器</p>
+        <span class="text-[10px] text-[var(--gold)]/60 font-mono">MOCK</span>
+      </div>
+      <button class="btn-neon w-full py-3.5 rounded-md font-display text-base" id="btn-gen-verse">生成我的专属 Verse ▸</button>
+      <div id="verse-box" class="hidden mt-3">
+        <div id="verse-lines" class="verse-box"></div>
+        <button class="btn-ghost w-full py-2.5 rounded-md text-xs mt-2" id="btn-copy-verse">复制歌词</button>
+      </div>
+    </div>
+
+    <!-- ② Rapper 人格卡（名字为主标题，code 弱化为小徽章） -->
+    <div class="result-card rounded-xl p-5 mb-4 ${isKanye ? 'kanye-mode' : ''}">
+      <div class="flex justify-end mb-1">
+        <span class="code-badge">${code}</span>
+      </div>
+      <h2 class="hero-name text-6xl leading-tight text-center mb-1">${result.name}</h2>
+      <p class="font-display text-lg tracking-[.25em] text-center text-[var(--gold)]/80 mb-2">${result.tag}</p>
+      <p class="hero-quote font-graff text-sm text-center mb-3">「${quote}」</p>
+      <div class="border-t border-[var(--line)] pt-3 mb-3">
+        <p class="text-[11px] tracking-widest text-[var(--muted)] mb-2">人格解析</p>
+        <p class="text-sm leading-relaxed text-white/85">${result.analysis}</p>
+      </div>
+      <div class="border-t border-[var(--line)] pt-3 opacity-70">
+        <p class="text-[9px] tracking-[.3em] text-[var(--muted)] mb-2">DIMENSIONS · 维度切片</p>
+        <div class="space-y-1.5">${dimHTML}</div>
+      </div>
+    </div>
+
+    ${isKanye ? `<div class="kanye-message mb-4">
+      <p class="msg-text">恭喜触发 1% 隐藏款<br/>你的精神状态领先人类 100 年！</p>
+    </div>` : ''}
+
+    <!-- ③ 厂牌 CP / Beef 测试 -->
+    <div class="result-card rounded-xl p-4 mb-4">
+      <p class="text-[11px] tracking-widest text-[var(--muted)] mb-3">🤝 厂牌 CP / Beef 测试</p>
+      <button class="btn-ghost w-full py-3 rounded-md text-sm mb-3" id="btn-share-homie">拉 homie 来测 ↗</button>
+      <select id="friend-result" class="friend-select mb-3">
+        <option value="">选择朋友的测试结果...</option>
+        ${friendOptions}
+      </select>
+      <div id="cp-result">
+        <p class="text-[11px] text-[var(--muted)] text-center py-3">↑ 选个朋友的厂牌，测测你们的 CP / Beef</p>
+      </div>
+    </div>
+
+    <!-- ④ 生成地下身份证/专辑封面（最显眼位置） -->
+    <div class="result-card rounded-xl p-5 mb-4">
+      <p class="text-[11px] tracking-widest text-[var(--muted)] mb-3 text-center">🎤 地下身份证 · 专属专辑封面</p>
+      <button class="btn-gold w-full py-5 rounded-md font-display text-2xl" id="btn-poster">生成专属专辑封面 ▸</button>
+      <div id="poster-preview" class="poster-preview hidden mt-4"></div>
+    </div>
+
+    <!-- 底部操作 -->
+    <div class="space-y-3">
+      <button class="btn-neon w-full py-3.5 rounded-md font-display text-base" id="btn-restart">再录一版（重测）</button>
+      <button class="btn-ghost w-full py-3 rounded-md text-sm" id="btn-share">复制厂牌档案</button>
+    </div>
+    <p class="text-center text-[10px] text-[var(--muted)] mt-4 leading-relaxed">
+      本结果由街头研究中心 · 非官方 MBTI 实验室出具<br/>与任何真实厂牌、厂牌主理人均无关联
+    </p>
+  `;
+
+  /* —— 重测 —— */
+  $('btn-restart').addEventListener('click', () => {
+    answers = new Array(QUESTIONS.length).fill(null);
+    idx = 0;
+    show('home');
+  });
+
+  /* —— 复制厂牌档案 —— */
+  $('btn-share').addEventListener('click', async () => {
+    const text = `🎤 RATI · 你的 rapper 人格\n━━━━━━━━━━\n${code} · ${result.name}\n${result.tag}\n━━━━━━━━━━\n来测你的地下厂牌人格：${location.href}`;
+    const btn = $('btn-share');
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = '已复制，发到群里炸场 ✓';
+    } catch (e) {
+      btn.textContent = '复制失败，截图也行';
+    }
+    setTimeout(() => { btn.textContent = '复制厂牌档案'; }, 2200);
+  });
+
+  /* —— 生成 AI Verse —— */
+  $('btn-gen-verse').addEventListener('click', async () => {
+    const btn = $('btn-gen-verse');
+    const oldText = btn.textContent;
+    btn.textContent = 'AI 正在写词...';
+    btn.classList.add('btn-loading');
+    const verses = await fetchAIVerse(code, answers);
+    btn.textContent = oldText;
+    btn.classList.remove('btn-loading');
+    const lines = Array.isArray(verses) ? verses : (verses.lines || []);
+    $('verse-lines').innerHTML = lines.map(l => `<p class="verse-line">${l}</p>`).join('');
+    $('verse-box').classList.remove('hidden');
+    $('verse-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  /* —— 复制 Verse —— */
+  $('btn-copy-verse').addEventListener('click', async () => {
+    const lines = document.querySelectorAll('#verse-lines .verse-line');
+    const text = Array.from(lines).map(l => l.textContent.replace(/^♪\s*/, '')).join('\n');
+    const btn = $('btn-copy-verse');
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = '已复制 ✓';
+    } catch (e) {
+      btn.textContent = '复制失败';
+    }
+    setTimeout(() => { btn.textContent = '复制歌词'; }, 2000);
+  });
+
+  /* —— 拉 homie 来测（复制分享链接） —— */
+  $('btn-share-homie').addEventListener('click', async () => {
+    const text = `🎤 兄弟来测你的 rapper 人格！\n我是 ${code} · ${result.name}\n你也来一发：${location.href}`;
+    const btn = $('btn-share-homie');
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = '链接已复制，发给 homie ✓';
+    } catch (e) {
+      btn.textContent = '复制失败，手动转发';
+    }
+    setTimeout(() => { btn.textContent = '拉 homie 来测 ↗'; }, 2200);
+  });
+
+  /* —— 朋友结果选择 → 渲染 CP/Beef —— */
+  $('friend-result').addEventListener('change', (e) => {
+    renderCP(e.target.value);
+  });
+
+  /* —— 生成签约海报 —— */
+  $('btn-poster').addEventListener('click', generatePoster);
+}
+
+/* ================= 事件绑定 & 启动 ================= */
+$('btn-back').addEventListener('click', () => {
+  if (isAnimating) return;
+  if (idx > 0) {
+    idx--;
+    renderQuestion('back');
+  }
+});
+
+$('btn-start').addEventListener('click', () => {
+  answers = new Array(QUESTIONS.length).fill(null);
+  idx = 0;
+  show('quiz');
+  renderQuestion('next');
+});
+
+// 启动：生成古巴链环 + 默认首页 + 预渲染第1题
+buildCubanChain();
+show('home');
+renderQuestion('next');
+</script>
+</body>
+</html>
